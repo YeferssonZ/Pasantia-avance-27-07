@@ -1,91 +1,127 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Iniciar Sesión</title>
-    <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
-    <!-- Bootstrap icons-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Lottie CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lottie-web@5.7.4/build/player/lottie.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .login-form .btn-primary {
+            width: 100%;
+        }
+
+        .login-social-btn {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .login-social-btn .btn {
+            flex: 1;
+            margin-right: 5px;
+        }
+
+        .lottie-animation {
+            width: 400px;
+            height: 400px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+    </style>
 </head>
 
 <body>
-    <section class="vh-100">
-        <div class="container-fluid h-custom">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-md-9 col-lg-6 col-xl-5">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-                        class="img-fluid" alt="Sample image">
-                </div>
-                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                    <form>
-                        <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start mb-4">
-                            <p class="lead fw-normal mb-0 me-3">Sign in with</p>
-                            <button type="button" class="btn btn-primary btn-floating mx-1">
-                                <i class="fab fa-facebook-f"></i>
-                            </button>
-                            <button type="button" class="btn btn-primary btn-floating mx-1">
-                                <i class="fab fa-twitter"></i>
-                            </button>
-                            <button type="button" class="btn btn-primary btn-floating mx-1">
-                                <i class="fab fa-linkedin-in"></i>
-                            </button>
+    <div class="container mt-5 h-100 d-flex align-items-center justify-content-center">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="login-container">
+                    <h2 class="login-heading">Login</h2>
+                    <form class="login-form">
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control" id="email" required>
                         </div>
-
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="remember">
+                            <label class="form-check-label" for="remember">Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign In</button>
                         <div class="divider d-flex align-items-center my-4">
-                            <p class="text-center fw-bold mx-3 mb-0">Or</p>
+                            <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
                         </div>
-
-                        <!-- Email input -->
-                        <div class="form-outline mb-4">
-                            <input type="email" id="form3Example3" class="form-control form-control-lg"
-                                placeholder="Enter a valid email address" />
-                            <label class="form-label" for="form3Example3">Email address</label>
-                        </div>
-
-                        <!-- Password input -->
-                        <div class="form-outline mb-3">
-                            <input type="password" id="form3Example4" class="form-control form-control-lg"
-                                placeholder="Enter password" />
-                            <label class="form-label" for="form3Example4">Password</label>
-                        </div>
-
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <!-- Checkbox -->
-                            <div class="form-check">
-                                <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-                                <label class="form-check-label" for="form2Example3">
-                                    Remember me
-                                </label>
-                            </div>
-                            <a href="#!" class="text-body">Forgot password?</a>
-                        </div>
-
-                        <div class="text-center text-lg-start">
-                            <button type="button" class="btn btn-primary btn-lg"
-                                style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
-                            <p class="small fw-bold mt-3">Don't have an account? <a href="#!"
-                                    class="text-danger">Register</a></p>
-                        </div>
-
                     </form>
+                    <div class="mt-4 login-social-btn">
+                        <button class="btn btn-primary"><i class="fab fa-facebook-f mr-2"></i>Sign in with Facebook</button>
+                        <button class="btn btn-danger"><i class="fab fa-google mr-2"></i>Sign in with Google</button>
+                    </div>
                 </div>
             </div>
+            <div class="col-md-6 d-flex align-items-center">
+                <div class="lottie-animation" id="lottie-animation"></div>
+            </div>
         </div>
+    </div>
 
-    </section>
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Lottie JS -->
+    <script src="https://cdn.jsdelivr.net/npm/lottie-web@5.7.4/build/player/lottie.min.js"></script>
+    <!-- Lottie Animation -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Replace the animationData variable with your actual Lottie JSON data
+            const animationData = {
+                container: document.getElementById("lottie-animation"),
+                renderer: "svg",
+                loop: true,
+                autoplay: true,
+                path: "https://lottie.host/7236fe8f-bedc-40b0-8d53-2f161ac05bb0/j6fUkIcZp7.json",
+            };
 
-    <!-- Bootstrap core JS y otros scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            // Play the Lottie animation
+            lottie.loadAnimation(animationData);
+        });
+    </script>
 </body>
 
 </html>

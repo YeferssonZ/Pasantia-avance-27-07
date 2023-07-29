@@ -1,12 +1,89 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+    /* Estilos para las imágenes del carrusel */
+    .img-carousel {
+        width: 1200px;
+        /* Ancho fijo de 1000px */
+        height: 400px;
+        /* Altura fija de 400px */
+    }
+
+    .carousel-control-container {
+        display: flex;
+        justify-content: space-between;
+        /* Para colocar los botones en los extremos */
+        position: relative;
+        /* Para que los botones no se muevan al cambiar de imagen */
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 30px;
+        height: 30px;
+        /* Establecer un tamaño fijo */
+        border-radius: 50%;
+        border: 1px solid #ccc;
+        background-color: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        /* Centrar verticalmente */
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 15px;
+        /* Establecer un tamaño fijo para el icono */
+    }
+
+    .carousel-control-prev {
+        left: -30px;
+        /* Posición para el botón "previous" */
+    }
+
+    .carousel-control-next {
+        right: -30px;
+        /* Posición para el botón "next" */
+    }
+
+</style>
 <!-- Header-->
 <header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Shop in style</h1>
-            <p class="lead fw-normal text-white-50 mb-0">With this shop homepage template</p>
+    <div class="d-flex justify-content-center"> <!-- Agregar esta clase para centrar el carrusel -->
+        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-bs-target="#carouselExample" data-bs-slide-to="0" class="active"></li>
+                <li data-bs-target="#carouselExample" data-bs-slide-to="1"></li>
+                <li data-bs-target="#carouselExample" data-bs-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://scontent.faqp7-1.fna.fbcdn.net/v/t31.18172-8/18738401_1268518579912056_9031656252354382830_o.jpg?stp=dst-jpg_p960x960&_nc_cat=108&cb=99be929b-3346023f&ccb=1-7&_nc_sid=730e14&_nc_eui2=AeFeKvvkmZGYkjvcQh3LUv21ccU791P0l41xxTv3U_SXjc9ay-WPD8d-UDeIluH4fjxFtAobeQlh_6zCpvZSqsVP&_nc_ohc=wHbBQBKiYIwAX_cHW0Q&_nc_ht=scontent.faqp7-1.fna&oh=00_AfBPh_rFzq0P9z7PhY8_Vjv4kS1BeSJfutaqWYhmemw6YQ&oe=64ED0CCA" class="d-block img-carousel" alt="Image 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://scontent.faqp7-1.fna.fbcdn.net/v/t31.18172-8/18673255_1268525616578019_303907124418695049_o.jpg?stp=dst-jpg_p960x960&_nc_cat=105&cb=99be929b-3346023f&ccb=1-7&_nc_sid=19026a&_nc_eui2=AeGIbBB-XMN1yXvrQMJFOwzPX6n1nE2YlBNfqfWcTZiUE3KdjngIJkUigSmt4r0b5Q4NRGxp7KvpgP7M2thGQhlv&_nc_ohc=Y_10Xd0YsTYAX9oX7WX&_nc_ht=scontent.faqp7-1.fna&oh=00_AfCAuTTdphASdDZ-opCQlg4byKuIByqnR6faXv9crGi86g&oe=64ED11E8" class="d-block img-carousel" alt="Image 2">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://scontent.faqp7-1.fna.fbcdn.net/v/t31.18172-8/18699519_1268539816576599_8855635339338888270_o.jpg?stp=dst-jpg_p960x960&_nc_cat=100&cb=99be929b-3346023f&ccb=1-7&_nc_sid=730e14&_nc_eui2=AeHZZfhJp6AklCTL343vC6Xv2nAm_9L6YsTacCb_0vpixO-gIu6AwJwcbSdXYDM4k3VIXi6oQzdDANc_LwPfSpsf&_nc_ohc=iXY-zeL0jDgAX8Gzc9s&_nc_ht=scontent.faqp7-1.fna&oh=00_AfBdouA06t-0pQRm0WSiKwa9qTQC5bEzXfgTGHED1cVdFg&oe=64ECE949" class="d-block img-carousel" alt="Image 3">
+                </div>
+            </div>
+            <div class="carousel-control-container">
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
         </div>
     </div>
 </header>
