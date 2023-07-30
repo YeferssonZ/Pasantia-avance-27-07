@@ -7,20 +7,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Shop Homepage - Start Bootstrap Template</title>
+    <title>Shop Homepage - CODIGO SAC.</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
     <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <style>
+        .dropdown-hover:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu.multi-column {
+            columns: 3;
+        }
+    </style>
 </head>
 
 <body>
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="#!">Start Bootstrap</a>
+            <a class="navbar-brand" href="#!">CODIGO SAC.</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -28,20 +37,25 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">Blog</a></li>
-                    <li class="nav-item dropdown">
+                    <!-- Lista de Categorías y Subcategorías -->
+                    <li class="nav-item dropdown dropdown-hover">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#!">All Products</a></li>
-                            <li>
-                                <hr class="dropdown-divider" />
-                            </li>
-                            <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                            <li><a class="dropdown-item" href="#!">Guía</a></li>
+                            data-bs-toggle="dropdown" aria-expanded="false">Productos</a>
+                        <ul class="dropdown-menu multi-column columns-3" aria-labelledby="navbarDropdown">
+                            <div class="row">
+                                {% for categoria in categorias %}
+                                <div class="col">
+                                    <li><a class="dropdown-item" href="#!">{{ categoria.nombre }}</a></li>
+                                    {% for subcategoria in categoria.subcategoria_set.all %}
+                                    <li><a class="dropdown-item" href="#!">{{ subcategoria.nombre }}</a></li>
+                                    {% endfor %}
+                                </div>
+                                {% endfor %}
+                            </div>
                         </ul>
                     </li>
+                    <li class="nav-item"><a class="nav-link" href="#!">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#!">Tutoriales</a></li>
                 </ul>
                 <form class="d-flex me-auto">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
