@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row align-items-center">
+        <div class="col-md-6 col-lg-4">
+            <!-- Product image with zoom effect -->
+            <center>
+            <div class="zoom-effect border border-primary rounded">
+                <img src="{{ producto.imagen.url }}" class="img-fluid" alt="{{ producto.nombre }}" style="width: 300px; height: 300px;">
+            </div>
+        </center>
+        </div>
+        <div class="col-md-6 col-lg-8">
+            <!-- Product name, price, stock, and cart -->
+            <h1 class="fw-bolder">{{ producto.nombre }}</h1>
+            <p class="h4 fw-bold text-primary">S/. {{ producto.precio }}</p>
+            {% if producto.stock > 0 %}
+            <p class="h6">Stock: {{ producto.stock }}</p>
+            <div class="input-group mb-3">
+                <button class="btn btn-outline-secondary" type="button" id="decrease-btn">-</button>
+                <input type="text" class="form-control text-center" id="quantity-input" value="1" readonly>
+                <button class="btn btn-outline-secondary" type="button" id="increase-btn">+</button>
+            </div>
+            <button class="btn btn-primary" id="add-to-cart-btn" style="width: 100%;">Agregar al carrito <i class="bi bi-cart"></i></button>
+            {% else %}
+            <p class="text-danger">Agotado</p>
+            {% endif %}
+            <!-- Product navigation buttons -->
+            <div class="d-flex justify-content-between mt-3">
+                <a href="#" class="btn btn-outline-primary btn-sm">&lt; Producto Anterior</a>
+                <a href="#" class="btn btn-outline-primary btn-sm">Siguiente Producto &gt;</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product information, specifications, and related products -->
+    <div class="mt-5">
+        <h2 class="fw-bold">Información:</h2>
+        <p>{{ producto.descripcion }}</p>
+
+        <hr class="my-4">
+        <h2 class="fw-bold">Especificaciones Técnicas:</h2>
+        <p>Esta información se proporciona de forma estática para este ejemplo. Puedes agregar tus propias especificaciones técnicas aquí.</p>
+
+        <hr class="my-4">
+        <h2 class="fw-bold">Productos Relacionados:</h2>
+        <!-- Productos relacionados list -->
+        <ul>
+            <li>Producto Relacionado 1</li>
+            <li>Producto Relacionado 2</li>
+            <li>Producto Relacionado 3</li>
+            <!-- Agrega más productos relacionados según sea necesario -->
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+<style>
+    /* Estilos para el efecto de zoom en la imagen */
+    .zoom-effect {
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .zoom-effect img {
+        transition: transform 0.3s;
+    }
+
+    .zoom-effect img:hover {
+        transform: scale(1.1); /* Ajusta este valor según tu preferencia de aumento */
+    }
+</style>

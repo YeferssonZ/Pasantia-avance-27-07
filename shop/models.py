@@ -37,10 +37,19 @@ class Subcategoria(models.Model):
 class Producto(models.Model):
     nombre = models.CharField(max_length=200)
     descripcion = models.TextField()
-    stock = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.IntegerField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     subcategoria = models.ForeignKey(Subcategoria, on_delete=models.CASCADE, blank=True, null=True)
     imagen = models.ImageField(upload_to='productos/', null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        # Verificar si el objeto ya tiene un ID asignado
+        if not self.id:
+            # Obtener el máximo ID existente y agregar 1
+            max_id = Producto.objects.aggregate(models.Max('id'))['id__max']
+            self.id = max_id + 1 if max_id else 1
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.nombre

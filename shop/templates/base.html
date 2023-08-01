@@ -14,22 +14,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
-    <style>
-        .dropdown-hover:hover .dropdown-menu {
-            display: block;
-        }
-
-        .dropdown-menu.multi-column {
-            columns: 3;
-        }
-    </style>
+    <!-- Enlace al archivo base.css -->
+    <link href="{% static 'css/base.css' %}" rel="stylesheet" />
 </head>
 
 <body>
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="#!">CODIGO SAC.</a>
+            <a class="navbar-brand" href="/">CODIGO SAC.</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -39,15 +32,17 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <!-- Lista de Categorías y Subcategorías -->
                     <li class="nav-item dropdown dropdown-hover">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">Productos</a>
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">Productos</a>
                         <ul class="dropdown-menu multi-column columns-3" aria-labelledby="navbarDropdown">
                             <div class="row">
                                 {% for categoria in categorias %}
                                 <div class="col">
-                                    <li><a class="dropdown-item" href="#!">{{ categoria.nombre }}</a></li>
+                                    <li><a class="dropdown-item"
+                                            href="{% url 'shop:mostrar_categoria' categoria.id %}">{{categoria.nombre|upper}}</a></li>
                                     {% for subcategoria in categoria.subcategoria_set.all %}
-                                    <li><a class="dropdown-item" href="#!">{{ subcategoria.nombre }}</a></li>
+                                    <li><a class="dropdown-item"
+                                            href="{% url 'shop:mostrar_subcategoria' subcategoria.id %}">{{subcategoria.nombre }}</a></li>
                                     {% endfor %}
                                 </div>
                                 {% endfor %}
@@ -58,24 +53,27 @@
                     <li class="nav-item"><a class="nav-link" href="#!">Tutoriales</a></li>
                 </ul>
                 <form class="d-flex me-auto">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-dark" type="submit">Search</button>
+                    <div class="input-group">
+                        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-light btn-search" type="submit">
+                            <i class="bi-search"></i> <!-- Ícono de búsqueda de Bootstrap -->
+                        </button>
+                    </div>
                 </form>
                 <form class="d-flex">
-                    <button class="btn btn-outline-dark me-2" type="submit">
+                    <button class="btn btn-outline-light me-2" type="submit">
                         <i class="bi-cart-fill me-1"></i>
                         Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                        <span class="badge bg-light text-dark ms-1 rounded-pill">0</span>
                     </button>
-
-                    <!-- Lista desplegable con Login -->
-                    <div class="dropdown ms-auto">
-                        <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton"
+                    <div class="dropdown">
+                        <!-- Cambia la clase del botón de Login a la nueva clase personalizada -->
+                        <button class="btn btn-custom-login dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi-list me-1"></i>
                             Login
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                             <li><a class="dropdown-item" href="{% url 'shop:login' %}">Login</a></li>
                             <li>
                                 <hr class="dropdown-divider" />
@@ -92,9 +90,11 @@
         </div>
     </nav>
 
-    <!-- Contenido específico de cada página -->
-    {% block content %}
-    {% endblock %}
+    <main style="margin: 15px 0;">
+        <!-- Contenido específico de cada página -->
+        {% block content %}
+        {% endblock %}
+    </main>
 
     <!-- Pie de página -->
     <footer class="bg-dark text-white py-4">
@@ -111,7 +111,7 @@
                 <div class="col-md-4 mb-3">
                     <h5>Enlaces</h5>
                     <ul class="list-unstyled">
-                        <li><a class="text-white" href="#!">Inicio</a></li>
+                        <li><a class="text-white" href="/">Inicio</a></li>
                         <li><a class="text-white" href="#!">Productos</a></li>
                         <li><a class="text-white" href="#!">Ofertas</a></li>
                         <li><a class="text-white" href="#!">Contacto</a></li>
