@@ -9,7 +9,7 @@
             <div class="zoom-effect border border-primary rounded">
                 <img src="{{ producto.imagen.url }}" class="img-fluid" alt="{{ producto.nombre }}" style="width: 300px; height: 300px;">
             </div>
-        </center>
+            </center>
         </div>
         <div class="col-md-6 col-lg-8">
             <!-- Product name, price, stock, and cart -->
@@ -28,15 +28,18 @@
             {% endif %}
             <!-- Product navigation buttons -->
             <div class="d-flex justify-content-between mt-3">
-                <a href="#" class="btn btn-outline-primary btn-sm">&lt; Producto Anterior</a>
-                <a href="#" class="btn btn-outline-primary btn-sm">Siguiente Producto &gt;</a>
+                {% if producto_anterior %}
+                    <a href="{% url 'shop:mostrar_producto' producto_anterior.id %}" class="btn btn-outline-primary btn-sm">&lt; Producto Anterior</a>
+                {% endif %}
+                {% if producto_siguiente %}
+                    <a href="{% url 'shop:mostrar_producto' producto_siguiente.id %}" class="btn btn-outline-primary btn-sm">Siguiente Producto &gt;</a>
+                {% endif %}
             </div>
-        </div>
     </div>
 
     <!-- Product information, specifications, and related products -->
     <div class="mt-5">
-        <h2 class="fw-bold">Información:</h2>
+        <h2 class="fw-bold">Descripción:</h2>
         <p>{{ producto.descripcion }}</p>
 
         <hr class="my-4">
@@ -56,18 +59,3 @@
 </div>
 {% endblock %}
 
-<style>
-    /* Estilos para el efecto de zoom en la imagen */
-    .zoom-effect {
-        overflow: hidden;
-        cursor: pointer;
-    }
-
-    .zoom-effect img {
-        transition: transform 0.3s;
-    }
-
-    .zoom-effect img:hover {
-        transform: scale(1.1); /* Ajusta este valor según tu preferencia de aumento */
-    }
-</style>

@@ -1,0 +1,13 @@
+/* Estilos para el efecto de zoom en la imagen */
+.zoom-effect {
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.zoom-effect img {
+    transition: transform 0.3s;
+}
+
+.zoom-effect img:hover {
+    transform: scale(1.1); /* Ajusta este valor según tu preferencia de aumento */
+}

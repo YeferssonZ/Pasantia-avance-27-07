@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
 from .models import *
 
 # Create your views here.
@@ -33,8 +34,31 @@ def mostrar_subcategoria(request, subcategoria_id):
     return render(request, 'categoria.html', {'categoria': subcategoria.categoria, 'subcategorias': subcategoria.categoria.subcategoria_set.all(), 'productos': productos})
 
 def mostrar_producto(request, producto_id):
-    # Obtener el producto seleccionado desde la base de datos
     producto = get_object_or_404(Producto, id=producto_id)
+    subcategoria_productos = Producto.objects.filter(subcategoria=producto.subcategoria).order_by('id')
 
-    # Pasa los datos a la plantilla 'producto.html'
-    return render(request, 'producto.html', {'producto': producto})
+    # Obtener el índice del producto actual en la lista
+    current_index = list(subcategoria_productos).index(producto)
+
+    # Obtener el producto anterior y siguiente si existen
+    producto_anterior = subcategoria_productos[current_index - 1] if current_index > 0 else None
+    producto_siguiente = subcategoria_productos[current_index + 1] if current_index < len(subcategoria_productos) - 1 else None
+
+    context = {
+        'producto': producto,
+        'producto_anterior': producto_anterior,
+        'producto_siguiente': producto_siguiente,
+    }
+
+    return render(request, 'producto.html', context)
+
+def buscar_productos(request):
+    query = request.GET.get('q')
+
+    if query:
+        # Realiza la búsqueda de productos que coincidan con la consulta
+        productos = Producto.objects.filter(nombre__icontains=query)
+    else:
+        productos = []
+
+    return render(request, 'buscar_producto.html', {'query': query, 'productos': productos})
