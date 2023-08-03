@@ -2,60 +2,122 @@
 
 {% block content %}
 <div class="container mt-4">
-    <div class="row align-items-center">
+    <div class="row">
         <div class="col-md-6 col-lg-4">
             <!-- Product image with zoom effect -->
             <center>
-            <div class="zoom-effect border border-primary rounded">
-                <img src="{{ producto.imagen.url }}" class="img-fluid" alt="{{ producto.nombre }}" style="width: 300px; height: 300px;">
-            </div>
+                <div class="zoom-effect border border-primary rounded">
+                    <img src="{{ producto.imagen.url }}" class="img-fluid" alt="{{ producto.nombre }}"
+                        style="width: 300px; height: 300px;">
+                </div>
             </center>
         </div>
         <div class="col-md-6 col-lg-8">
-            <!-- Product name, price, stock, and cart -->
-            <h1 class="fw-bolder">{{ producto.nombre }}</h1>
-            <p class="h4 fw-bold text-primary">S/. {{ producto.precio }}</p>
-            {% if producto.stock > 0 %}
-            <p class="h6">Stock: {{ producto.stock }}</p>
-            <div class="input-group mb-3">
-                <button class="btn btn-outline-secondary" type="button" id="decrease-btn">-</button>
-                <input type="text" class="form-control text-center" id="quantity-input" value="1" readonly>
-                <button class="btn btn-outline-secondary" type="button" id="increase-btn">+</button>
+            <div class="d-flex justify-content-between align-items-center">
+                <!-- Product name and price -->
+                <div>
+                    <h1 class="fw-bolder">{{ producto.nombre }}</h1>
+                    <p class="h4 fw-bold text-primary">S/. {{ producto.precio }}</p>
+                </div>
+                <!-- Product stock and cart -->
+                <div>
+                    {% if producto.stock > 0 %}
+                    <p class="h6">Stock: {{ producto.stock }}</p>
+                    <div class="input-group mb-3">
+                        <button class="btn btn-outline-secondary" type="button" id="decrease-btn">-</button>
+                        <input type="text" class="form-control text-center" id="quantity-input" value="1" readonly>
+                        <button class="btn btn-outline-secondary" type="button" id="increase-btn">+</button>
+                    </div>
+                    <button class="btn btn-primary" id="add-to-cart-btn" style="width: 100%;">Agregar al carrito <i
+                            class="bi bi-cart"></i></button>
+                    {% else %}
+                    <p class="text-danger">Agotado</p>
+                    {% endif %}
+                </div>
             </div>
-            <button class="btn btn-primary" id="add-to-cart-btn" style="width: 100%;">Agregar al carrito <i class="bi bi-cart"></i></button>
-            {% else %}
-            <p class="text-danger">Agotado</p>
-            {% endif %}
             <!-- Product navigation buttons -->
-            <div class="d-flex justify-content-between mt-3">
-                {% if producto_anterior %}
-                    <a href="{% url 'shop:mostrar_producto' producto_anterior.id %}" class="btn btn-outline-primary btn-sm">&lt; Producto Anterior</a>
-                {% endif %}
-                {% if producto_siguiente %}
-                    <a href="{% url 'shop:mostrar_producto' producto_siguiente.id %}" class="btn btn-outline-primary btn-sm">Siguiente Producto &gt;</a>
-                {% endif %}
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-group">
+                    {% if producto_anterior %}
+                    <a href="{% url 'shop:mostrar_producto' producto_anterior.id %}"
+                        class="btn btn-outline-primary">&lt; Producto Anterior</a>
+                    {% endif %}
+                    {% if producto_siguiente %}
+                    <a href="{% url 'shop:mostrar_producto' producto_siguiente.id %}"
+                        class="btn btn-outline-primary">Siguiente Producto &gt;</a>
+                    {% endif %}
+                </div>
             </div>
+        </div>
     </div>
 
     <!-- Product information, specifications, and related products -->
     <div class="mt-5">
         <h2 class="fw-bold">Descripción:</h2>
-        <p>{{ producto.descripcion }}</p>
+        <pre>{{ producto.descripcion }}</pre>
 
         <hr class="my-4">
         <h2 class="fw-bold">Especificaciones Técnicas:</h2>
-        <p>Esta información se proporciona de forma estática para este ejemplo. Puedes agregar tus propias especificaciones técnicas aquí.</p>
+        <ul>
+            {% for especificacion in producto.obtener_especificaciones %}
+            <li>{{ especificacion }}</li>
+            {% endfor %}
+        </ul>
 
+        <!-- Productos Relacionados -->
+        {% if productos_relacionados %}
         <hr class="my-4">
         <h2 class="fw-bold">Productos Relacionados:</h2>
-        <!-- Productos relacionados list -->
-        <ul>
-            <li>Producto Relacionado 1</li>
-            <li>Producto Relacionado 2</li>
-            <li>Producto Relacionado 3</li>
-            <!-- Agrega más productos relacionados según sea necesario -->
-        </ul>
+        <div id="productosRelacionadosCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for producto_relacionado in productos_relacionados %}
+                {% if forloop.counter0|divisibleby:4 %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="row">
+                        {% endif %}
+                        <div class="col-md-3 mb-4">
+                            <div class="card">
+                                <a href="{% url 'shop:mostrar_producto' producto_relacionado.id %}">
+                                    <img src="{{ producto_relacionado.imagen.url }}" class="card-img-top"
+                                        alt="{{ producto_relacionado.nombre }}">
+                                </a>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ producto_relacionado.nombre }}</h5>
+                                    <p class="card-text">S/. {{ producto_relacionado.precio }}</p>
+                                    {% if producto_relacionado.stock > 0 %}
+                                    <p class="card-text">Stock: {{ producto_relacionado.stock }}</p>
+                                    {% else %}
+                                    <p class="text-danger">Agotado</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% if forloop.counter|divisibleby:4 or forloop.last %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev btn-carousel" type="button"
+                data-bs-target="#productosRelacionadosCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next btn-carousel" type="button"
+                data-bs-target="#productosRelacionadosCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        {% else %}
+        <hr class="my-4">
+        <h2 class="fw-bold">Productos Relacionados:</h2>
+        <div class="alert alert-warning mt-5" role="alert" style="background-color: #f8d7da;">
+            <h4 class="alert-heading">¡Ups! No hay productos relacionados disponibles.</h4>
+            <p class="mb-0">Selecciona otra subcategoría para ver productos relacionados.</p>
+        </div>
+        {% endif %}
+
     </div>
 </div>
 {% endblock %}
-

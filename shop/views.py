@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import *
+import random
 
 # Create your views here.
 def index(request):
@@ -44,10 +45,14 @@ def mostrar_producto(request, producto_id):
     producto_anterior = subcategoria_productos[current_index - 1] if current_index > 0 else None
     producto_siguiente = subcategoria_productos[current_index + 1] if current_index < len(subcategoria_productos) - 1 else None
 
+    # Obtener productos relacionados al azar (excepto el producto actual) y elegir hasta 3
+    productos_relacionados = random.sample(list(subcategoria_productos.exclude(id=producto.id)), min(5, subcategoria_productos.count() - 1))
+
     context = {
         'producto': producto,
         'producto_anterior': producto_anterior,
         'producto_siguiente': producto_siguiente,
+        'productos_relacionados': productos_relacionados,
     }
 
     return render(request, 'producto.html', context)

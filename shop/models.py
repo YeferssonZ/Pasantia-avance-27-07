@@ -39,6 +39,7 @@ class Producto(models.Model):
     descripcion = models.TextField()
     stock = models.IntegerField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
+    especificaciones_tecnicas = models.TextField(blank=True, null=True)
     subcategoria = models.ForeignKey(Subcategoria, on_delete=models.CASCADE, blank=True, null=True)
     imagen = models.ImageField(upload_to='productos/', null=True, blank=True)
 
@@ -50,6 +51,12 @@ class Producto(models.Model):
             self.id = max_id + 1 if max_id else 1
 
         super().save(*args, **kwargs)
+
+    def obtener_especificaciones(self):
+        if self.especificaciones_tecnicas:
+            return self.especificaciones_tecnicas.split(',')
+        else:
+            return []
 
     def __str__(self):
         return self.nombre
