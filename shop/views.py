@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
+from django.contrib.auth import logout, authenticate, login
+from django.shortcuts import redirect
 from .models import *
 import random
 
@@ -12,9 +13,25 @@ def index(request):
     # Pasa los datos a la plantilla 'index.html'
     return render(request, 'index.html', {'categorias': categorias, 'subcategorias': subcategorias})
 
+def logout_view(request):
+    logout(request)
+    return redirect('shop:index')
 
-def login(request):
-    return render(request, 'login.html')
+def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(request, email=email, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('shop:index')
+        else:
+            # Aquí puedes agregar algún mensaje de error en caso de inicio de sesión fallido
+            pass
+
+    return render(request, 'registrar/login.html')
+
 
 def mostrar_categoria(request, categoria_id):
     # Obtener la categoría seleccionada desde la base de datos

@@ -39,7 +39,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Apartado login Google
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '764646802182-6uu7uaaekr77tdg90kr90tcioc4psjg5.apps.googleusercontent.com',
+            'secret': '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',
+        }
+    }
+}
+
+LOGIN_REDIRECT_URL = '/'  # Redirección después de iniciar sesión con éxito
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'  # Redirección después de cerrar sesión
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

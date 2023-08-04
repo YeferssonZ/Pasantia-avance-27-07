@@ -26,14 +26,15 @@
 </head>
 
 <body>
-    <div class="container-fluid bg-primary py-2">
+    <div class="container-fluid">
         <!-- Buscador y Login -->
-        <div class="container">
+        <div class="container-fluid bg-primary py-2 encabezado-buscador">
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <form class="d-flex" method="get" action="{% url 'shop:buscar_productos' %}">
                         <div class="input-group">
-                            <input class="form-control form-control-lg" type="search" name="q" id="search-input" placeholder="Buscar productos..." aria-label="Search" autocomplete="off">
+                            <input class="form-control form-control-lg" type="search" name="q" id="search-input"
+                                placeholder="Buscar productos..." aria-label="Search" autocomplete="off">
                             <button class="btn btn-primary btn-lg btn-search" type="submit">
                                 <i class="bi-search"></i>
                             </button>
@@ -41,40 +42,26 @@
                     </form>
                 </div>
                 <div class="col-md-4 text-end">
-                    <!-- Botón para abrir el modal de login -->
-                    <button type="button" class="btn btn-custom-login" data-bs-toggle="modal" data-bs-target="#loginModal">
-                        <i class="bi-person me-1"></i>
-                        Login
-                    </button>
+                    {% if user.is_authenticated %}
+                        <!-- Si el usuario está autenticado, muestra el menú desplegable -->
+                        <div class="dropdown">
+                            <button class="btn btn-custom-login dropdown-toggle" type="button" id="userDropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                ¡Bienvenido, {{ user.username }}!
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="#">My Account</a></li>
+                                <li><a class="dropdown-item" href="{% url 'shop:logout' %}">Logout</a></li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <!-- Si el usuario no está autenticado, muestra el enlace de inicio de sesión -->
+                        <a href="{% url 'shop:login' %}" class="btn btn-primary">Login</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
-    </div>
-        
     
-    <!-- Modal de Login -->
-    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="loginModalLabel">Iniciar sesión</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Aquí coloca tu formulario de login -->
-                    <!-- Por ejemplo:
-                    <form method="post" action="{% url 'shop:login' %}">
-                        {% csrf_token %}
-                        <!-- Tus campos de usuario y contraseña -->
-                        <!-- Botón de inicio de sesión -->
-                    </form>
-                    -->
-                </div>
-            </div>
-        </div>
-    </div>
-    
-        
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <div class="container px-4 px-lg-5">
