@@ -1,28 +1,10 @@
 from django.conf import settings
 from django.db import models
-
-class Roles(models.Model):
-    ADMIN = 'admin'
-    CLIENTE = 'cliente'
-    ROL_CHOICES = [
-        (ADMIN, 'Admin'),
-        (CLIENTE, 'Cliente')
-    ]
-    nombre = models.CharField(max_length=100, choices=ROL_CHOICES)
-
-    def __str__(self):
-        return self.nombre.capitalize()
-
-class Cuenta(models.Model):
-    username = models.CharField(max_length=200)
-    password = models.CharField(max_length=200)
-    
-    rol = models.ForeignKey(Roles, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.username
+from django.contrib.auth.models import User
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=100)
+    imagen = models.ImageField(upload_to='categorias/', null=True, blank=True)
 
     def __str__(self):
         return self.nombre
@@ -63,7 +45,6 @@ class Producto(models.Model):
 
 class Tutorial(models.Model):
     titulo = models.CharField(max_length=200)
-    descripcion = models.TextField()
     contenido = models.TextField()
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
 
@@ -73,19 +54,28 @@ class Tutorial(models.Model):
 class Comentario(models.Model):
     texto = models.TextField()
     fecha_hora = models.DateTimeField(auto_now_add=True)
-    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.usuario.username} - {self.producto.nombre}'
 
 class Carrito(models.Model):
-    usuario = models.ForeignKey(Cuenta, on_delete=models.CASCADE)
-    productos = models.ManyToManyField(Producto)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    productos = models.ManyToManyField('Producto', through='ItemCarrito')
     creado = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Carrito de {self.usuario.username}'
+        return f'Carrito {self.id}'
+    
+class ItemCarrito(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE)
+    producto = models.ForeignKey('Producto', on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f'Item: {self.producto.nombre} - Cantidad: {self.cantidad}'
 
 class MetodoPago(models.Model):
     nombre = models.CharField(max_length=100)

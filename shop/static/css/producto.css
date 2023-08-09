@@ -2,9 +2,6 @@
 .zoom-effect {
     overflow: hidden;
     cursor: pointer;
-}
-
-.zoom-effect img {
     transition: transform 0.3s;
 }
 
@@ -19,10 +16,8 @@ pre {
     font-weight: 500;
 }
 
-.carousel-control-prev,
-.carousel-control-next {
-    background-color: #f8f9fa;
-    /* Color de fondo gris plateado claro */
+#productosRelacionadosCarousel .carousel-control-prev,
+#productosRelacionadosCarousel .carousel-control-next {
     color: #333;
     /* Color del texto en los botones */
     border-radius: 50%;
@@ -35,43 +30,30 @@ pre {
     /* Tamaño del icono de flecha */
     line-height: 1;
     /* Alineación vertical del contenido */
+    visibility: hidden;
+    /* Ocultar inicialmente los botones */
+    transition: background-color 0.3s, visibility 0.3s;
+    /* Transición suave para los cambios de color y visibilidad */
 }
 
-/* Estilos para el icono de flecha en los botones */
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
+#productosRelacionadosCarousel .carousel-control-prev-icon,
+#productosRelacionadosCarousel .carousel-control-next-icon {
     background-color: #333;
     /* Color de la flecha */
     padding: 12px;
     /* Espaciado interno */
 }
 
-/* Estilos para el color de fondo de los botones al pasar el cursor por encima */
-.carousel-control-prev:hover,
-.carousel-control-next:hover {
+#productosRelacionadosCarousel .carousel-control-prev:hover,
+#productosRelacionadosCarousel .carousel-control-next:hover {
     background-color: #d4d4d4;
     /* Color de fondo gris plateado claro al pasar el cursor por encima */
 }
 
-/* Estilos para ocultar inicialmente los botones */
-#productosRelacionadosCarousel .carousel-control-prev,
-#productosRelacionadosCarousel .carousel-control-next {
-    visibility: hidden;
-}
-
-/* Estilos para ocultar los botones inicialmente y mostrarlos al acercarse */
-#productosRelacionadosCarousel .btn-carousel {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-}
-
-#productosRelacionadosCarousel:hover .btn-carousel {
-    opacity: 1;
+#productosRelacionadosCarousel:hover .carousel-control-prev,
+#productosRelacionadosCarousel:hover .carousel-control-next {
     visibility: visible;
+    /* Mostrar los botones al acercarse */
 }
 
 /* Estilos para centrar los botones en ambos bordes */
@@ -87,14 +69,6 @@ pre {
     margin-top: 4rem;
 }
 
-.zoom-effect {
-    transition: transform 0.3s;
-}
-
-.zoom-effect:hover {
-    transform: scale(1.1);
-}
-
 .btn-carousel {
     position: absolute;
     top: 50%;
@@ -102,6 +76,17 @@ pre {
     background-color: #ccc;
     color: #333;
     font-size: 1.5rem;
+    opacity: 0;
+    visibility: hidden;
+    /* Ocultar los botones inicialmente */
+    transition: opacity 0.3s, visibility 0.3s;
+    /* Transición suave para los cambios de opacidad y visibilidad */
+}
+
+#productosRelacionadosCarousel:hover .btn-carousel {
+    opacity: 1;
+    visibility: visible;
+    /* Mostrar los botones al acercarse */
 }
 
 .btn-carousel:hover {
