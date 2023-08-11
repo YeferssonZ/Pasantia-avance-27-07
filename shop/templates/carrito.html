@@ -1,35 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% if carrito_no_autenticado %}
-<h2>Carrito de compras (no autenticado)</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Precio unitario</th>
-            <th>Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in carrito_no_autenticado.itemcarrito_set.all %}
-            <tr>
-                <td>
-                    <img src="{{ item.producto.imagen.url }}" alt="{{ item.producto.nombre }}" width="50">
-                    {{ item.producto.nombre }}
-                </td>
-                <td>{{ item.cantidad }}</td>
-                <td>S/. {{ item.producto.precio }}</td>
-                <td>S/. {{ item.subtotal }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% endif %}
-
-{% if carrito %}
-<h2>Carrito de compras (autenticado)</h2>
+{% if subtotal_items %}
+<h2>Carrito de compras</h2>
 <table class="table">
     <thead>
         <tr>

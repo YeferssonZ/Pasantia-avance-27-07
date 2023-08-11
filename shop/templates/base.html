@@ -1,3 +1,4 @@
+{% load socialaccount %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
@@ -48,18 +49,23 @@
                     <div class="dropdown">
                         <a class="btn btn-custom-login dropdown-toggle" href="#" role="button" id="userDropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img src="{{ user.socialaccount_set.first.get_avatar_url }}" alt="User Avatar"
-                                class="rounded-circle me-1" style="width: 24px; height: 24px;">
+                            {% if user.socialaccount_set.first %}
+                                <img src="{{ user.socialaccount_set.first.get_avatar_url }}" alt="User Avatar"
+                                    class="rounded-circle me-1" style="width: 24px; height: 24px;">
+                            {% else %}
+                                <img src="{% static 'image/login.png' %}" alt="Default Avatar"
+                                    class="rounded-circle me-1" style="width: 24px; height: 24px;">
+                            {% endif %}
                             {{ user.username|title }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#">My Account</a></li>
+                            <li><a class="dropdown-item" href="{% url 'shop:profile' %}">My Account</a></li>
                             <li><a class="dropdown-item" href="{% url 'shop:logout' %}">Logout</a></li>
                         </ul>
                     </div>
                     {% else %}
                     <!-- Si el usuario no está autenticado, muestra el enlace de inicio de sesión -->
-                    <a href="{% url 'shop:login' %}" class="btn btn-primary">Login</a>
+                    <a href="{% provider_login_url 'google' %}" class="btn btn-primary">Login</a>
                     {% endif %}
                 </div>                
             </div>

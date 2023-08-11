@@ -14,11 +14,17 @@ def carrito_cantidad(request):
         try:
             carrito = Carrito.objects.get(usuario=request.user)
             cantidad_productos = carrito.itemcarrito_set.aggregate(total_cantidad=models.Sum('cantidad'))['total_cantidad']
+            if cantidad_productos is None:
+                cantidad_productos = 0
         except Carrito.DoesNotExist:
             pass
     else:
-        # Obtener la cantidad de la sesión si el usuario no está logueado
-        session_carrito = request.session.get('carrito', {})
-        cantidad_productos = sum(session_carrito.values())
+        carrito_id = request.session.get('carrito_id')  # Cambiar esta línea
+        if carrito_id:
+            try:
+                carrito = Carrito.objects.get(id=carrito_id)
+                cantidad_productos = carrito.itemcarrito_set.aggregate(total_cantidad=models.Sum('cantidad'))['total_cantidad']
+            except Carrito.DoesNotExist:
+                pass
         
     return {'carrito_cantidad': cantidad_productos}

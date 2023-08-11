@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from random import sample
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.signals import user_logged_in
+from allauth.account.views import LoginView, SignupView
 
 # Create your views here.
 def index(request):
@@ -33,25 +34,29 @@ def index(request):
     return render(request, 'index.html', {'categorias': categorias, 'subcategorias': subcategorias, 'carrito': carrito, 'productos_destacados': productos_destacados})
 
 
+@login_required
+def profile(request):
+    # Obtener la información del usuario autenticado
+    user = request.user
+    # Puedes agregar más detalles según tus necesidades, como el nombre, la dirección, etc.
+
+    return render(request, 'profile.html', {'user': user})
 
 def logout_view(request):
     logout(request)
     return redirect('shop:index')
 
-def login_view(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        user = authenticate(request, email=email, password=password)
+class CustomLoginView(LoginView):
+    template_name = 'socialaccount/login.html'
 
-        if user is not None:
-            login(request, user)
-            return redirect('shop:index')
-        else:
-            # Aquí puedes agregar algún mensaje de error en caso de inicio de sesión fallido
-            pass
 
-    return render(request, 'registrar/login.html')
+class CustomSignupView(SignupView):
+    template_name = 'socialaccount/signup.html'  # Asegúrate de que coincida con el nombre de tu plantilla personalizada
+
+    def form_valid(self, form):
+        user = form.save(self.request)
+        login(self.request, user)  # Iniciar sesión del usuario recién registrado
+        return redirect('shop:index')  # Redirigir a la página deseada después del registro exitoso
 
 
 def mostrar_categoria(request, categoria_id):
@@ -115,6 +120,15 @@ def agregar_al_carrito(request, producto_id):
     if request.user.is_authenticated:
         carrito_autenticado, _ = Carrito.objects.get_or_create(usuario=request.user)
 
+        # Verificar si el producto ya existe en el carrito del usuario autenticado
+        item_carrito_autenticado = carrito_autenticado.itemcarrito_set.filter(producto=producto).first()
+        if item_carrito_autenticado:
+            # Actualizar la cantidad si ya existe
+            if item_carrito_autenticado.cantidad < producto.stock:
+                item_carrito_autenticado.cantidad += 1
+                item_carrito_autenticado.save()
+            return JsonResponse({'cantidad': item_carrito_autenticado.cantidad})
+
     # Obtener el carrito de la sesión actual del usuario o crear uno nuevo
     carrito_id = request.session.get('carrito_id')
     if carrito_id:
@@ -158,6 +172,7 @@ def agregar_al_carrito(request, producto_id):
 
     return JsonResponse({})
 
+
 def transferir_carrito(sender, user, request, **kwargs):
     carrito_no_autenticado = None
     carrito_autenticado = None
@@ -184,17 +199,25 @@ def transferir_carrito(sender, user, request, **kwargs):
 user_logged_in.connect(transferir_carrito)
 
 
+# def clear_carrito_session(sender, user, request, **kwargs):
+#     if 'carrito_id' in request.session:
+#         del request.session['carrito_id']
+
+# user_logged_in.connect(clear_carrito_session)
+
+
 def ver_carrito(request):
     usuario = request.user
-
-    if usuario.is_authenticated:  # Verificar si el usuario está autenticado
-        carrito_autenticado, _ = Carrito.objects.get_or_create(usuario=usuario)
-    else:
-        carrito_autenticado = None
-
+    carrito_autenticado = None
     carrito_no_autenticado = None
+    subtotal_items = []
+    total = 0
 
-    # Obtener el carrito no autenticado si existe
+    # Obtener el carrito autenticado si el usuario está logueado
+    if usuario.is_authenticated:
+        carrito_autenticado, _ = Carrito.objects.get_or_create(usuario=usuario)
+
+    # Obtener el carrito no autenticado si existe en la sesión
     carrito_id = request.session.get('carrito_id')
     if carrito_id:
         try:
@@ -202,18 +225,16 @@ def ver_carrito(request):
         except Carrito.DoesNotExist:
             carrito_no_autenticado = None
 
-    if carrito_no_autenticado and carrito_no_autenticado.itemcarrito_set.exists():
-        for item in carrito_no_autenticado.itemcarrito_set.all():
-            item.carrito = carrito_autenticado
-            item.save()
-
-        carrito_no_autenticado.delete()  # Eliminar el carrito no autenticado
-
-    subtotal_items = []
-    total = 0
-
+    # Si hay un carrito autenticado, agregar sus productos al subtotal y total
     if carrito_autenticado:
         for item in carrito_autenticado.itemcarrito_set.all():
+            subtotal = item.cantidad * item.producto.precio
+            subtotal_items.append((item, subtotal))
+            total += subtotal
+
+    # Si hay un carrito no autenticado, agregar sus productos al subtotal y total
+    if carrito_no_autenticado:
+        for item in carrito_no_autenticado.itemcarrito_set.all():
             subtotal = item.cantidad * item.producto.precio
             subtotal_items.append((item, subtotal))
             total += subtotal

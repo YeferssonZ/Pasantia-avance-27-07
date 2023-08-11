@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+AUTH_USER_MODEL = 'auth.User'
+
 
 # Application definition
 
@@ -47,7 +49,8 @@ INSTALLED_APPS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'allauth.account.auth_backends.AuthenticationBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',  # Para autenticación por correo electrónico
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -55,7 +58,11 @@ SOCIALACCOUNT_PROVIDERS = {
         'APP': {
             'client_id': '764646802182-6uu7uaaekr77tdg90kr90tcioc4psjg5.apps.googleusercontent.com',
             'secret': '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',
-        }
+        },
+        # 'AUTH_PARAMS': {
+        #     'access_type': 'online',  # O 'offline' si necesitas acceso offline
+        # },
+        # 'LOGIN_TEMPLATE': 'socialaccount/login.html',  # Ruta de tu plantilla personalizada
     }
 }
 
