@@ -18,6 +18,7 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('login/', views.CustomLoginView.as_view(), name='login'),
     path('signup/', views.CustomSignupView.as_view(), name='signup'),
+    
 ]
 
 if settings.DEBUG:

@@ -49,14 +49,9 @@ def logout_view(request):
 class CustomLoginView(LoginView):
     template_name = 'socialaccount/login.html'
 
-
 class CustomSignupView(SignupView):
-    template_name = 'socialaccount/signup.html'  # Asegúrate de que coincida con el nombre de tu plantilla personalizada
-
-    def form_valid(self, form):
-        user = form.save(self.request)
-        login(self.request, user)  # Iniciar sesión del usuario recién registrado
-        return redirect('shop:index')  # Redirigir a la página deseada después del registro exitoso
+    template_name = 'socialaccount/signup.html'
+    
 
 
 def mostrar_categoria(request, categoria_id):
